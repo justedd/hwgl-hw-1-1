@@ -73,7 +73,7 @@ func countWordsFromFile(filePath string) ([]*CountedWord, error) {
 	return countWords(file)
 }
 
-func calculateTop(n uint, words []*CountedWord) []*CountedWord {
+func getTop(n uint, words []*CountedWord) []*CountedWord {
 	sort.Slice(words, func(i, j int) bool {
 		return words[i].Count > words[j].Count
 	})
@@ -97,5 +97,5 @@ func FileTop(topN uint, filename string) []*CountedWord {
 		fmt.Println(err)
 	}
 
-	return calculateTop(topN, words)
+	return getTop(topN, words)
 }
