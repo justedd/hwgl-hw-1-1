@@ -20,6 +20,15 @@ type CountedWord struct {
 func countWords(filePath string) ([]*CountedWord, error) {
 	file, err := os.Open(filePath)
 
+	defer func() {
+		err := file.Close()
+
+		if err != nil {
+			// TODO: use slog
+			fmt.Printf("Error while closing file: %v", err)
+		}
+	}()
+
 	if err != nil {
 		return nil, fmt.Errorf("[countWords] %w: %v", errFileOpen, err)
 	}
@@ -38,6 +47,7 @@ func countWords(filePath string) ([]*CountedWord, error) {
 		raw := scanner.Text()
 		word := reg.ReplaceAllString(strings.ToLower(raw), "")
 
+		// TODO: ignore empty words
 		cw, ok := wordMap[word]
 
 		if !ok { 
