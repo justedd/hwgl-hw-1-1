@@ -91,7 +91,7 @@ func getTop(n uint, words []*CountedWord) []*CountedWord {
 }
 
 func FileTop(topN uint, filename string) []*CountedWord {
-	words, err := countWordsFromFile("text.txt")
+	words, err := countWordsFromFile(filename)
 
 	if err != nil {
 		fmt.Println(err)
