@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"regexp"
 	"sort"
@@ -17,30 +18,16 @@ type CountedWord struct {
 	Count uint
 }
 
-func countWords(filePath string) ([]*CountedWord, error) {
-	file, err := os.Open(filePath)
-
-	defer func() {
-		err := file.Close()
-
-		if err != nil {
-			// TODO: use slog
-			fmt.Printf("Error while closing file: %v", err)
-		}
-	}()
-
-	if err != nil {
-		return nil, fmt.Errorf("[countWords] %w: %v", errFileOpen, err)
-	}
-
+func countWords(reader io.Reader) ([]*CountedWord, error) {
 	reg, err := regexp.Compile("[^a-z]+")
+
 	if err != nil {
 		return nil, fmt.Errorf("[countWords] regexp compile error: %v", err)
 	}
 
 	wordMap := make(map[string]*CountedWord)
 
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanWords)
 
 	for scanner.Scan() {
@@ -67,6 +54,25 @@ func countWords(filePath string) ([]*CountedWord, error) {
 	return result, nil
 }
 
+func countWordsFromFile(filePath string) ([]*CountedWord, error) {
+	file, err := os.Open(filePath)
+
+	if err != nil {
+		return nil, fmt.Errorf("[countWords] %w: %v", errFileOpen, err)
+	}
+
+	defer func() {
+		err := file.Close()
+
+		if err != nil {
+			// TODO: use slog
+			fmt.Printf("Error while closing file: %v", err)
+		}
+	}()
+
+	return countWords(file)
+}
+
 func calculateTop(n uint, words []*CountedWord) []*CountedWord {
 	sort.Slice(words, func(i, j int) bool {
 		return words[i].Count > words[j].Count
@@ -85,7 +91,7 @@ func calculateTop(n uint, words []*CountedWord) []*CountedWord {
 }
 
 func FileTop(topN uint, filename string) []*CountedWord {
-	words, err := countWords("text.txt")
+	words, err := countWordsFromFile("text.txt")
 
 	if err != nil {
 		fmt.Println(err)
