@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/justedd/hwgl-hw-1-1/internal/counter"
+	"github.com/justedd/hwgl-hw-1-1/internal/usecase/counter"
 	"fmt"
 )
 
