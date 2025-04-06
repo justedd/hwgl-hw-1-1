@@ -13,21 +13,25 @@ import (
 	"strings"
 )
 
-type Counter struct {}
+type Counter struct {
+	wordRegexp *regexp.Regexp
+}
 
 var errFileOpen = errors.New("unable to open file")
 
-func NewCounter() *Counter {
-	return &Counter{}
+func NewCounter() (*Counter, error) {
+	wordRegexp, err := regexp.Compile("[^a-z]+")
+
+	if err != nil {
+		return nil, fmt.Errorf("NewCounter: regexp compile error: %v", err)
+	}
+
+	return &Counter{
+		wordRegexp: wordRegexp,
+	}, nil
 }
 
 func (c *Counter) countWords(reader io.Reader) ([]*entity.CountedWord, error) {
-	reg, err := regexp.Compile("[^a-z]+")
-
-	if err != nil {
-		return nil, fmt.Errorf("countWords: regexp compile error: %v", err)
-	}
-
 	wordMap := make(map[string]*entity.CountedWord)
 
 	scanner := bufio.NewScanner(reader)
@@ -35,7 +39,7 @@ func (c *Counter) countWords(reader io.Reader) ([]*entity.CountedWord, error) {
 
 	for scanner.Scan() {
 		raw := scanner.Text()
-		word := reg.ReplaceAllString(strings.ToLower(raw), "")
+		word := c.wordRegexp.ReplaceAllString(strings.ToLower(raw), "")
 
 		if word == "" {
 			continue
@@ -72,7 +76,7 @@ func (c *Counter) countWordsFromFile(filePath string) ([]*entity.CountedWord, er
 
 		if err != nil {
 			// TODO: use slog
-			fmt.Printf("Error while closing file: %v", err)
+			fmt.Printf("CountWords: error while closing file: %v", err)
 		}
 	}()
 

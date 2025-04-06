@@ -9,6 +9,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func mustCreateCounter(t *testing.T) *Counter {
+	counter, err := NewCounter()
+	require.NoError(t, err)
+
+	return counter
+}
+
 func TestGetTop(t *testing.T) {
 	var cases = []struct {
 		desc string
@@ -41,7 +48,7 @@ func TestGetTop(t *testing.T) {
 		},
 	}
 
-	counter := NewCounter()
+	counter := mustCreateCounter(t)
 
 	for _, tc := range cases {
 		t.Run(tc.desc, func(t *testing.T){
@@ -82,7 +89,7 @@ func TestCountWords(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		counter := NewCounter()
+		counter := mustCreateCounter(t)
 
 		t.Run(tc.desc, func(t *testing.T){
 			words, err := counter.countWords(strings.NewReader(tc.in))

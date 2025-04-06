@@ -6,11 +6,17 @@ import (
 )
 
 func main() {
-	counter := counter.NewCounter()
+	counter, err := counter.NewCounter()
+	if err != nil {
+		fmt.Printf("Initialization error: %v", err)
+		return
+	}
+
 	top, err := counter.FileTop(5, "text.txt")
 
 	if err != nil {
 		fmt.Printf("Error: %v", err)
+		return
 	}
 
 	for i := range top {
