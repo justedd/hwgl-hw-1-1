@@ -30,7 +30,7 @@ func TestRun(t *testing.T) {
 		file := createTempFileWithContent(t, "a b b a, a c d e f g")
 		defer os.Remove(file.Name())
 
-		cli.Run([]string{"binary_name", "2", file.Name()})
+		cli.Run([]string{"topcounter", "2", file.Name()})
 
 		pipeWriter.Close()
 		os.Stdout = origStdout
