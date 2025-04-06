@@ -4,7 +4,6 @@ import (
 	"testing"
 	"strings"
 	"log/slog"
-	"os"
 
 	"github.com/justedd/hwgl-hw-1-1/internal/entity"
 
@@ -12,12 +11,7 @@ import (
 )
 
 func mustCreateCounter(t *testing.T) *Counter {
-	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	})
-	logger := slog.New(handler)
-
-	counter, err := New(logger)
+	counter, err := New(slog.Default())
 	require.NoError(t, err)
 
 	return counter

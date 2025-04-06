@@ -11,12 +11,7 @@ import (
 )
 
 func mustCreateApp(t *testing.T) *App {
-	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	})
-	logger := slog.New(handler)
-
-	counter, err := New(logger)
+	counter, err := New(slog.Default())
 	require.NoError(t, err)
 
 	return counter
