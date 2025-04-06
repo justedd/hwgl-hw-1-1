@@ -7,39 +7,40 @@ import (
 )
 
 func TestGetTop(t *testing.T) {
-	t.Run("simple case", func(t *testing.T) {
-		in := []*CountedWord{
-			{Word: "a", Count: 5},
-			{Word: "b", Count: 50},
-			{Word: "c", Count: 1},
-			{Word: "d", Count: 17},
-		}
+	var cases = []struct {
+		desc string
+		n uint
+		in  []*CountedWord
+		out []*CountedWord
+	}{
+		{
+			desc: "simple",
+			n: 2,
+			in: []*CountedWord{
+				{Word: "a", Count: 5},
+				{Word: "b", Count: 50},
+				{Word: "c", Count: 1},
+				{Word: "d", Count: 17},
+			},
+			out: []*CountedWord{{Word: "b", Count: 50},	{Word: "d", Count: 17}},
+		},
+		{
+			desc: "N overflow",
+			n: 50,
+			in: []*CountedWord{{Word: "b", Count: 50}, {Word: "d", Count: 17}},
+			out: []*CountedWord{{Word: "b", Count: 50},	{Word: "d", Count: 17}},
+		},
+		{
+			desc: "empty list",
+			n: 50,
+			in: []*CountedWord{},
+			out: []*CountedWord{},
+		},
+	}
 
-		expected := []*CountedWord{
-			{Word: "b", Count: 50},
-			{Word: "d", Count: 17},
-		}
-
-		require.Equal(t, expected, getTop(2, in))
-	})
-
-	t.Run("big N", func(t *testing.T) {
-		in := []*CountedWord{
-			{Word: "b", Count: 50},
-		}
-
-		expected := []*CountedWord{
-			{Word: "b", Count: 50},
-		}
-
-		require.Equal(t, expected, getTop(20, in))
-	})
-
-	t.Run("empty list", func(t *testing.T) {
-		in := []*CountedWord{}
-
-		expected := []*CountedWord{}
-
-		require.Equal(t, expected, getTop(20, in))
-	})
+	for _, tc := range cases {
+		t.Run(tc.desc, func(t *testing.T){
+			require.Equal(t, tc.out, getTop(tc.n, tc.in))
+		})
+	}
 }
