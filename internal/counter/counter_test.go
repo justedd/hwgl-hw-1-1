@@ -2,6 +2,7 @@ package counter
 
 import (
 	"testing"
+	"strings"
 
 	"github.com/stretchr/testify/require"
 )
@@ -41,6 +42,31 @@ func TestGetTop(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.desc, func(t *testing.T){
 			require.Equal(t, tc.out, getTop(tc.n, tc.in))
+		})
+	}
+}
+
+func TestCountWords(t *testing.T) {
+	var cases = []struct {
+		desc string
+		in string
+		out []*CountedWord
+	}{
+		{
+			desc: "simple",
+			in: ".a    a; b\na,",
+			out: []*CountedWord{
+				{Word: "a", Count: 3},
+				{Word: "b", Count: 1},
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.desc, func(t *testing.T){
+			words, err :=countWords(strings.NewReader(tc.in))
+			require.NoError(t, err)
+			require.Equal(t, tc.out, words)
 		})
 	}
 }
