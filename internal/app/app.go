@@ -41,7 +41,8 @@ func (app *App) Run(rawArgs []string) {
 
 	if err != nil {
 		app.logger.Error("App Run: args error", slog.Any("err", err))
-		fmt.Println("Argument error")
+
+		fmt.Println("Argument error, usage: `app 5 text.txt`")
 
 		return
 	}
@@ -67,17 +68,17 @@ func (app *App) Run(rawArgs []string) {
 
 func parseArgs(args []string) (*Args, error) {
 	if len(args) != 3 {
-		return nil, errors.New("wrong usage")
+		return nil, errors.New("parseArgs: wrong usage")
 	}
 
 	top, err := strconv.ParseUint(args[1], 10, 32)
 
 	if err != nil {
-		return nil, errors.New("invalid top number")
+		return nil, errors.New("parseArgs: invalid top number")
 	}
 
 	if len(args[2]) < 1 {
-		return nil, errors.New("filename looks wrong")
+		return nil, errors.New("parseArgs: filename looks wrong")
 	}
 
 	return &Args{
