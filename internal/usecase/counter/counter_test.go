@@ -25,13 +25,13 @@ func TestGetTop(t *testing.T) {
 				{Word: "c", Count: 1},
 				{Word: "d", Count: 17},
 			},
-			out: []*entity.CountedWord{{Word: "b", Count: 50},	{Word: "d", Count: 17}},
+			out: []*entity.CountedWord{{Word: "b", Count: 50}, {Word: "d", Count: 17}},
 		},
 		{
 			desc: "N overflow",
 			n: 50,
 			in: []*entity.CountedWord{{Word: "b", Count: 50}, {Word: "d", Count: 17}},
-			out: []*entity.CountedWord{{Word: "b", Count: 50},	{Word: "d", Count: 17}},
+			out: []*entity.CountedWord{{Word: "b", Count: 50}, {Word: "d", Count: 17}},
 		},
 		{
 			desc: "empty list",
