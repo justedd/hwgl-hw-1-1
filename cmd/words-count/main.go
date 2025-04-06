@@ -2,12 +2,19 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 
 	"github.com/justedd/hwgl-hw-1-1/internal/usecase/counter"
 )
 
 func main() {
-	counter, err := counter.NewCounter()
+	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	})
+	logger := slog.New(handler)
+
+	counter, err := counter.NewCounter(logger)
 	if err != nil {
 		fmt.Printf("Initialization error: %v", err)
 		return

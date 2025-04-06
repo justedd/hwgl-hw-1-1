@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log/slog"
 	"os"
 	"regexp"
 	"sort"
@@ -15,11 +16,12 @@ import (
 
 type Counter struct {
 	wordRegexp *regexp.Regexp
+	log        *slog.Logger
 }
 
 var errFileOpen = errors.New("unable to open file")
 
-func NewCounter() (*Counter, error) {
+func NewCounter(log *slog.Logger) (*Counter, error) {
 	wordRegexp, err := regexp.Compile("[^a-z]+")
 
 	if err != nil {
@@ -28,6 +30,7 @@ func NewCounter() (*Counter, error) {
 
 	return &Counter{
 		wordRegexp: wordRegexp,
+		log:        log,
 	}, nil
 }
 
@@ -75,8 +78,7 @@ func (c *Counter) countWordsFromFile(filePath string) ([]*entity.CountedWord, er
 		err := file.Close()
 
 		if err != nil {
-			// TODO: use slog
-			fmt.Printf("CountWords: error while closing file: %v", err)
+			c.log.Error("CountWords: error while closing file", slog.Any("err", err))
 		}
 	}()
 
