@@ -25,7 +25,7 @@ func New(logger *slog.Logger) (*Counter, error) {
 	wordRegexp, err := regexp.Compile("[^a-z]+")
 
 	if err != nil {
-		return nil, fmt.Errorf("NewCounter: regexp compile error: %v", err)
+		return nil, fmt.Errorf("NewCounter: regexp compile error: %w", err)
 	}
 
 	return &Counter{
@@ -71,14 +71,14 @@ func (c *Counter) countWordsFromFile(filePath string) ([]*entity.CountedWord, er
 	file, err := os.Open(filePath)
 
 	if err != nil {
-		return nil, fmt.Errorf("countWords: %w: %v", ErrFileOpen, err)
+		return nil, fmt.Errorf("countWordsFromFile: %w: %v", ErrFileOpen, err)
 	}
 
 	defer func() {
 		err := file.Close()
 
 		if err != nil {
-			c.logger.Error("CountWords: error while closing file", slog.Any("err", err))
+			c.logger.Error("countWordsFromFile: error while closing file", slog.Any("err", err))
 		}
 	}()
 
@@ -93,6 +93,7 @@ func (c *Counter) getTop(n uint, words []*entity.CountedWord) []*entity.CountedW
 	topN := n
 	length := uint(len(words))
 	if topN > length {
+		c.logger.Warn("number of words is less than topN")
 		topN = length
 	}
 
@@ -106,7 +107,7 @@ func (c *Counter) FileTop(topN uint, filename string) ([]*entity.CountedWord, er
 	words, err := c.countWordsFromFile(filename)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("FileTop: %w", err)
 	}
 
 	return c.getTop(topN, words), nil

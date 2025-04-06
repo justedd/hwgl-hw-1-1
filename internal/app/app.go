@@ -31,7 +31,7 @@ func New(logger *slog.Logger) (*App, error) {
 		logger.Error("App New: initialization error", slog.Any("err", err))
 		fmt.Println("Initialization error")
 
-		return nil, err
+		return nil, fmt.Errorf("App New: %w", err)
 	}
 
 	return &App{
