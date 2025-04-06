@@ -34,7 +34,10 @@ func countWords(reader io.Reader) ([]*CountedWord, error) {
 		raw := scanner.Text()
 		word := reg.ReplaceAllString(strings.ToLower(raw), "")
 
-		// TODO: ignore empty words
+		if word == "" {
+			continue
+		}
+
 		cw, ok := wordMap[word]
 
 		if !ok { 

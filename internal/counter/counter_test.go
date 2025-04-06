@@ -60,6 +60,21 @@ func TestCountWords(t *testing.T) {
 				{Word: "b", Count: 1},
 			},
 		},
+		{
+			desc: "empty",
+			in: "",
+			out: []*CountedWord{},
+		},
+		{
+			desc: "spaces",
+			in: "   \n   ",
+			out: []*CountedWord{},
+		},
+		{
+			desc: "punctuation spaces",
+			in: "   ,, ..  a ",
+			out: []*CountedWord{{Word: "a", Count: 1}},
+		},
 	}
 
 	for _, tc := range cases {
