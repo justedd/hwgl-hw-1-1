@@ -21,7 +21,7 @@ type Args struct {
 }
 
 func New(logger *slog.Logger) (*App, error) {
-	wordCounter, err := counter.NewCounter(logger)
+	wordCounter, err := counter.New(logger)
 
 	if err != nil {
 		logger.Error("App New: initialization error", slog.Any("err", err))

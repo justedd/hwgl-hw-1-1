@@ -21,7 +21,7 @@ type Counter struct {
 
 var ErrFileOpen = errors.New("unable to open file")
 
-func NewCounter(logger *slog.Logger) (*Counter, error) {
+func New(logger *slog.Logger) (*Counter, error) {
 	wordRegexp, err := regexp.Compile("[^a-z]+")
 
 	if err != nil {

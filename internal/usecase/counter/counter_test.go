@@ -17,7 +17,7 @@ func mustCreateCounter(t *testing.T) *Counter {
 	})
 	logger := slog.New(handler)
 
-	counter, err := NewCounter(logger)
+	counter, err := New(logger)
 	require.NoError(t, err)
 
 	return counter
