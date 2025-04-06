@@ -13,9 +13,15 @@ import (
 	"strings"
 )
 
+type Counter struct {}
+
 var errFileOpen = errors.New("unable to open file")
 
-func countWords(reader io.Reader) ([]*entity.CountedWord, error) {
+func NewCounter() *Counter {
+	return &Counter{}
+}
+
+func (c *Counter) countWords(reader io.Reader) ([]*entity.CountedWord, error) {
 	reg, err := regexp.Compile("[^a-z]+")
 
 	if err != nil {
@@ -54,7 +60,7 @@ func countWords(reader io.Reader) ([]*entity.CountedWord, error) {
 	return result, nil
 }
 
-func countWordsFromFile(filePath string) ([]*entity.CountedWord, error) {
+func (c *Counter) countWordsFromFile(filePath string) ([]*entity.CountedWord, error) {
 	file, err := os.Open(filePath)
 
 	if err != nil {
@@ -70,10 +76,10 @@ func countWordsFromFile(filePath string) ([]*entity.CountedWord, error) {
 		}
 	}()
 
-	return countWords(file)
+	return c.countWords(file)
 }
 
-func getTop(n uint, words []*entity.CountedWord) []*entity.CountedWord {
+func (c *Counter) getTop(n uint, words []*entity.CountedWord) []*entity.CountedWord {
 	sort.Slice(words, func(i, j int) bool {
 		return words[i].Count > words[j].Count
 	})
@@ -90,12 +96,12 @@ func getTop(n uint, words []*entity.CountedWord) []*entity.CountedWord {
 	return result
 }
 
-func FileTop(topN uint, filename string) []*entity.CountedWord {
-	words, err := countWordsFromFile(filename)
+func (c *Counter) FileTop(topN uint, filename string) []*entity.CountedWord {
+	words, err := c.countWordsFromFile(filename)
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return getTop(topN, words)
+	return c.getTop(topN, words)
 }

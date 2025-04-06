@@ -41,9 +41,11 @@ func TestGetTop(t *testing.T) {
 		},
 	}
 
+	counter := NewCounter()
+
 	for _, tc := range cases {
 		t.Run(tc.desc, func(t *testing.T){
-			require.Equal(t, tc.out, getTop(tc.n, tc.in))
+			require.Equal(t, tc.out, counter.getTop(tc.n, tc.in))
 		})
 	}
 }
@@ -80,8 +82,10 @@ func TestCountWords(t *testing.T) {
 	}
 
 	for _, tc := range cases {
+		counter := NewCounter()
+
 		t.Run(tc.desc, func(t *testing.T){
-			words, err :=countWords(strings.NewReader(tc.in))
+			words, err := counter.countWords(strings.NewReader(tc.in))
 			require.NoError(t, err)
 			require.Equal(t, tc.out, words)
 		})

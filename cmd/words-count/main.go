@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	// TODO: check errors
+	counter := counter.NewCounter()
 	top := counter.FileTop(5, "text.txt")
 
 	for i := range top {
