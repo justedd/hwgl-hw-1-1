@@ -20,6 +20,10 @@ type Args struct {
 	Top      uint
 }
 
+var ErrWrongNumberOfArgs = errors.New("wrong number of args")
+var ErrWrongFilename = errors.New("filename looks wrong")
+var ErrWrongTop = errors.New("wrong top number")
+
 func New(logger *slog.Logger) (*App, error) {
 	wordCounter, err := counter.New(logger)
 
@@ -40,9 +44,8 @@ func (app *App) Run(rawArgs []string) {
 	args, err := parseArgs(rawArgs)
 
 	if err != nil {
-		app.logger.Error("App Run: args error", slog.Any("err", err))
-
-		fmt.Println("Argument error, usage: `app 5 text.txt`")
+		app.logger.Error("App Run: args error: ", slog.Any("err", err))
+		fmt.Println("Argument error, usage: `topcounter 5 text.txt`")
 
 		return
 	}
@@ -68,17 +71,17 @@ func (app *App) Run(rawArgs []string) {
 
 func parseArgs(args []string) (*Args, error) {
 	if len(args) != 3 {
-		return nil, errors.New("parseArgs: wrong usage")
+		return nil, fmt.Errorf("parseArgs: %w", ErrWrongNumberOfArgs)
 	}
 
 	top, err := strconv.ParseUint(args[1], 10, 32)
 
 	if err != nil {
-		return nil, errors.New("parseArgs: invalid top number")
+		return nil, fmt.Errorf("parseArgs: %w", ErrWrongTop)
 	}
 
 	if len(args[2]) < 1 {
-		return nil, errors.New("parseArgs: filename looks wrong")
+		return nil, fmt.Errorf("parseArgs: %w", ErrWrongFilename)
 	}
 
 	return &Args{
