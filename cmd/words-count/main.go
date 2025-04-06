@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -14,16 +15,24 @@ func main() {
 	})
 	logger := slog.New(handler)
 
-	counter, err := counter.NewCounter(logger)
+	wordCounter, err := counter.NewCounter(logger)
 	if err != nil {
-		fmt.Printf("Initialization error: %v", err)
+		logger.Error("main: initialization error", slog.Any("err", err))
+		fmt.Println("Initialization error")
+
 		return
 	}
 
-	top, err := counter.FileTop(5, "text.txt")
+	top, err := wordCounter.FileTop(5, "text.txt")
 
 	if err != nil {
-		fmt.Printf("Error: %v", err)
+		logger.Error("main: calculating top error", slog.Any("err", err))
+
+		if errors.Is(err, counter.ErrFileOpen) {
+			fmt.Println("Error while openning file")
+		} else {
+			fmt.Println("Internal error")
+		}
 		return
 	}
 
