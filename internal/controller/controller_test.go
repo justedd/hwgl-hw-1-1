@@ -9,6 +9,8 @@ import (
 )
 
 func mustCreateController(t *testing.T) *Controller {
+	t.Helper()
+
 	logger := slog.Default()
 	counter, err := counter.New(logger)
 	require.NoError(t, err)

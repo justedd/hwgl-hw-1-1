@@ -11,6 +11,8 @@ import (
 )
 
 func mustCreateApp(t *testing.T) *App {
+	t.Helper()
+
 	counter, err := New(slog.Default())
 	require.NoError(t, err)
 
@@ -46,6 +48,7 @@ func TestRun(t *testing.T) {
 
 func createTempFileWithContent(t *testing.T, content string) *os.File {
 	t.Helper()
+
 	tmpFile, err := os.CreateTemp("", "testoutput-*.txt")
 	require.NoError(t, err)
 

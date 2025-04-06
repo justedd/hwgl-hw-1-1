@@ -11,6 +11,8 @@ import (
 )
 
 func mustCreateCounter(t *testing.T) *Counter {
+	t.Helper()
+
 	counter, err := New(slog.Default())
 	require.NoError(t, err)
 
