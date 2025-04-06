@@ -4,6 +4,8 @@ import (
 	"testing"
 	"strings"
 
+	"github.com/justedd/hwgl-hw-1-1/internal/entity"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -11,31 +13,31 @@ func TestGetTop(t *testing.T) {
 	var cases = []struct {
 		desc string
 		n uint
-		in  []*CountedWord
-		out []*CountedWord
+		in  []*entity.CountedWord
+		out []*entity.CountedWord
 	}{
 		{
 			desc: "simple",
 			n: 2,
-			in: []*CountedWord{
+			in: []*entity.CountedWord{
 				{Word: "a", Count: 5},
 				{Word: "b", Count: 50},
 				{Word: "c", Count: 1},
 				{Word: "d", Count: 17},
 			},
-			out: []*CountedWord{{Word: "b", Count: 50},	{Word: "d", Count: 17}},
+			out: []*entity.CountedWord{{Word: "b", Count: 50},	{Word: "d", Count: 17}},
 		},
 		{
 			desc: "N overflow",
 			n: 50,
-			in: []*CountedWord{{Word: "b", Count: 50}, {Word: "d", Count: 17}},
-			out: []*CountedWord{{Word: "b", Count: 50},	{Word: "d", Count: 17}},
+			in: []*entity.CountedWord{{Word: "b", Count: 50}, {Word: "d", Count: 17}},
+			out: []*entity.CountedWord{{Word: "b", Count: 50},	{Word: "d", Count: 17}},
 		},
 		{
 			desc: "empty list",
 			n: 50,
-			in: []*CountedWord{},
-			out: []*CountedWord{},
+			in: []*entity.CountedWord{},
+			out: []*entity.CountedWord{},
 		},
 	}
 
@@ -50,12 +52,12 @@ func TestCountWords(t *testing.T) {
 	var cases = []struct {
 		desc string
 		in string
-		out []*CountedWord
+		out []*entity.CountedWord
 	}{
 		{
 			desc: "simple",
 			in: ".a    a; b\na,",
-			out: []*CountedWord{
+			out: []*entity.CountedWord{
 				{Word: "a", Count: 3},
 				{Word: "b", Count: 1},
 			},
@@ -63,17 +65,17 @@ func TestCountWords(t *testing.T) {
 		{
 			desc: "empty",
 			in: "",
-			out: []*CountedWord{},
+			out: []*entity.CountedWord{},
 		},
 		{
 			desc: "spaces",
 			in: "   \n   ",
-			out: []*CountedWord{},
+			out: []*entity.CountedWord{},
 		},
 		{
 			desc: "punctuation spaces",
 			in: "   ,, ..  a ",
-			out: []*CountedWord{{Word: "a", Count: 1}},
+			out: []*entity.CountedWord{{Word: "a", Count: 1}},
 		},
 	}
 

@@ -1,6 +1,8 @@
 package counter
 
 import (
+	"github.com/justedd/hwgl-hw-1-1/internal/entity"
+
 	"bufio"
 	"errors"
 	"fmt"
@@ -13,19 +15,14 @@ import (
 
 var errFileOpen = errors.New("unable to open file")
 
-type CountedWord struct {
-	Word  string
-	Count uint
-}
-
-func countWords(reader io.Reader) ([]*CountedWord, error) {
+func countWords(reader io.Reader) ([]*entity.CountedWord, error) {
 	reg, err := regexp.Compile("[^a-z]+")
 
 	if err != nil {
 		return nil, fmt.Errorf("[countWords] regexp compile error: %v", err)
 	}
 
-	wordMap := make(map[string]*CountedWord)
+	wordMap := make(map[string]*entity.CountedWord)
 
 	scanner := bufio.NewScanner(reader)
 	scanner.Split(bufio.ScanWords)
@@ -41,14 +38,14 @@ func countWords(reader io.Reader) ([]*CountedWord, error) {
 		cw, ok := wordMap[word]
 
 		if !ok { 
-			cw = &CountedWord{Word: word, Count: 0}
+			cw = &entity.CountedWord{Word: word, Count: 0}
 			wordMap[word] = cw
 		}
 
 		cw.Count += 1
 	}
 
-	result := make([]*CountedWord, 0, len(wordMap))
+	result := make([]*entity.CountedWord, 0, len(wordMap))
 
 	for _, cw := range wordMap {
 		result = append(result, cw)
@@ -57,7 +54,7 @@ func countWords(reader io.Reader) ([]*CountedWord, error) {
 	return result, nil
 }
 
-func countWordsFromFile(filePath string) ([]*CountedWord, error) {
+func countWordsFromFile(filePath string) ([]*entity.CountedWord, error) {
 	file, err := os.Open(filePath)
 
 	if err != nil {
@@ -76,7 +73,7 @@ func countWordsFromFile(filePath string) ([]*CountedWord, error) {
 	return countWords(file)
 }
 
-func getTop(n uint, words []*CountedWord) []*CountedWord {
+func getTop(n uint, words []*entity.CountedWord) []*entity.CountedWord {
 	sort.Slice(words, func(i, j int) bool {
 		return words[i].Count > words[j].Count
 	})
@@ -87,13 +84,13 @@ func getTop(n uint, words []*CountedWord) []*CountedWord {
 		topN = length
 	}
 
-	result := make([]*CountedWord, topN)
+	result := make([]*entity.CountedWord, topN)
 	copy(result, words)
 
 	return result
 }
 
-func FileTop(topN uint, filename string) []*CountedWord {
+func FileTop(topN uint, filename string) []*entity.CountedWord {
 	words, err := countWordsFromFile(filename)
 
 	if err != nil {
