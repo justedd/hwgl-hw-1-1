@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/justedd/hwgl-hw-1-1/internal/app"
-	"github.com/justedd/hwgl-hw-1-1/internal/usecase/counter"
 )
 
 func main() {
@@ -14,7 +13,8 @@ func main() {
 		Level: slog.LevelDebug,
 	})
 	logger := slog.New(handler)
-	wordCounter, err := counter.NewCounter(logger)
+
+	cli, err := app.New(logger)
 
 	if err != nil {
 		logger.Error("main: initialization error", slog.Any("err", err))
@@ -23,6 +23,5 @@ func main() {
 		return
 	}
 
-	cli := app.New(logger, wordCounter)
 	cli.Run(os.Args)
 }

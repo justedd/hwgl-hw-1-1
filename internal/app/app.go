@@ -20,18 +20,27 @@ type Args struct {
 	Top      uint
 }
 
-func New(logger *slog.Logger, wordCounter *counter.Counter) *App {
+func New(logger *slog.Logger) (*App, error) {
+	wordCounter, err := counter.NewCounter(logger)
+
+	if err != nil {
+		logger.Error("App New: initialization error", slog.Any("err", err))
+		fmt.Println("Initialization error")
+
+		return nil, err
+	}
+
 	return &App{
 		logger:      logger,
 		wordCounter: wordCounter,
-	}
+	}, nil
 }
 
 func (app *App) Run(rawArgs []string) {
 	args, err := parseArgs(rawArgs)
 
 	if err != nil {
-		app.logger.Error("main: args error", slog.Any("err", err))
+		app.logger.Error("App Run: args error", slog.Any("err", err))
 		fmt.Println("Argument error")
 
 		return
@@ -40,7 +49,7 @@ func (app *App) Run(rawArgs []string) {
 	top, err := app.wordCounter.FileTop(args.Top, args.FileName)
 
 	if err != nil {
-		app.logger.Error("main: calculating top error", slog.Any("err", err))
+		app.logger.Error("App Run: calculating top error", slog.Any("err", err))
 
 		if errors.Is(err, counter.ErrFileOpen) {
 			fmt.Println("Error while openning file")
