@@ -25,7 +25,7 @@ func (c *Counter) countWords(reader io.Reader) ([]*entity.CountedWord, error) {
 	reg, err := regexp.Compile("[^a-z]+")
 
 	if err != nil {
-		return nil, fmt.Errorf("[countWords] regexp compile error: %v", err)
+		return nil, fmt.Errorf("countWords: regexp compile error: %v", err)
 	}
 
 	wordMap := make(map[string]*entity.CountedWord)
@@ -64,7 +64,7 @@ func (c *Counter) countWordsFromFile(filePath string) ([]*entity.CountedWord, er
 	file, err := os.Open(filePath)
 
 	if err != nil {
-		return nil, fmt.Errorf("[countWords] %w: %v", errFileOpen, err)
+		return nil, fmt.Errorf("countWords: %w: %v", errFileOpen, err)
 	}
 
 	defer func() {
