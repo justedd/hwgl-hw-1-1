@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/justedd/hwgl-hw-1-1/internal/usecase/counter"
 	"fmt"
+
+	"github.com/justedd/hwgl-hw-1-1/internal/usecase/counter"
 )
 
 func main() {

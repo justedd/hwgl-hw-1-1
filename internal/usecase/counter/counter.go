@@ -47,12 +47,12 @@ func (c *Counter) countWords(reader io.Reader) ([]*entity.CountedWord, error) {
 
 		cw, ok := wordMap[word]
 
-		if !ok { 
+		if !ok {
 			cw = &entity.CountedWord{Word: word, Count: 0}
 			wordMap[word] = cw
 		}
 
-		cw.Count += 1
+		cw.Count++
 	}
 
 	result := make([]*entity.CountedWord, 0, len(wordMap))
