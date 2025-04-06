@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func mustCreateApp(t *testing.T) *App {
+func newTestApp(t *testing.T) *App {
 	t.Helper()
 
 	counter, err := New(slog.Default())
@@ -21,7 +21,7 @@ func mustCreateApp(t *testing.T) *App {
 
 func TestRun(t *testing.T) {
 	t.Run("simple", func(t *testing.T) {
-		cli := mustCreateApp(t)
+		cli := newTestApp(t)
 
 		origStdout := os.Stdout
 		pipeReader, pipeWriter, err := os.Pipe()

@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func mustCreateController(t *testing.T) *Controller {
+func newTestController(t *testing.T) *Controller {
 	t.Helper()
 
 	logger := slog.Default()
@@ -22,7 +22,7 @@ func mustCreateController(t *testing.T) *Controller {
 }
 
 func TestParseArgs(t *testing.T) {
-	ctrl := mustCreateController(t)
+	ctrl := newTestController(t)
 
 	t.Run("valid", func(t *testing.T) {
 		out, err := ctrl.parseArgs([]string{"topcounter", "3", "foo.txt"})

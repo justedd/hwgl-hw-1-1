@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func mustCreateCounter(t *testing.T) *Counter {
+func newTestCounter(t *testing.T) *Counter {
 	t.Helper()
 
 	counter, err := New(slog.Default())
@@ -51,7 +51,7 @@ func TestGetTop(t *testing.T) {
 		},
 	}
 
-	counter := mustCreateCounter(t)
+	counter := newTestCounter(t)
 
 	for _, tc := range cases {
 		t.Run(tc.desc, func(t *testing.T){
@@ -92,7 +92,7 @@ func TestCountWords(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		counter := mustCreateCounter(t)
+		counter := newTestCounter(t)
 
 		t.Run(tc.desc, func(t *testing.T){
 			words, err := counter.countWords(strings.NewReader(tc.in))
