@@ -96,12 +96,12 @@ func (c *Counter) getTop(n uint, words []*entity.CountedWord) []*entity.CountedW
 	return result
 }
 
-func (c *Counter) FileTop(topN uint, filename string) []*entity.CountedWord {
+func (c *Counter) FileTop(topN uint, filename string) ([]*entity.CountedWord, error) {
 	words, err := c.countWordsFromFile(filename)
 
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
-	return c.getTop(topN, words)
+	return c.getTop(topN, words), nil
 }
